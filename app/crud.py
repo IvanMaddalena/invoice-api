@@ -20,3 +20,15 @@ def create_invoice(db: Session, invoice: schemas.InvoiceCreate):
 
 def get_invoices(db: Session):
     return db.query(models.Invoice).all()
+
+def pay_invoice(db: Session, invoice_id: int):
+    invoice = db.query(models.Invoice).filter(models.Invoice.id == invoice_id).first()
+    if invoice:
+        invoice.paid = True
+        db.commit()
+        db.refresh(invoice)
+    return invoice
+
+def get_invoices_by_user(db: Session, user_id: int):
+    return db.query(models.Invoice).filter(models.Invoice.user_id == user_id).all()
+
