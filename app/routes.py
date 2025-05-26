@@ -27,3 +27,11 @@ def create_invoice(invoice: schemas.InvoiceCreate, db: Session = Depends(get_db)
 @router.get("/invoices/", response_model=list[schemas.Invoice])
 def read_invoices(db: Session = Depends(get_db)):
     return crud.get_invoices(db)
+
+@router.patch("/invoices/{invoice_id}/pay", response_model=schemas.Invoice)
+def mark_invoice_as_paid(invoice_id: int, db: Session = Depends(get_db)):
+    return crud.pay_invoice(db, invoice_id)
+
+@router.get("/invoices/by_user/", response_model=list[schemas.Invoice])
+def read_invoices_by_user(user_id: int, db: Session = Depends(get_db)):
+    return crud.get_invoices_by_user(db, user_id)
